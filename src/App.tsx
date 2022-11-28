@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { User } from './components/User';
+import { getUsers } from './service/getUsers';
+import { UserI } from './types/user';
 
 function App() {
+
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState<UserI[]>([]);
+
+  useEffect(() => {
+    setLoading(true);
+    getUsers().then((data) => {
+      setUsers(data);
+      setLoading(false);
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getUsers])
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {loading ? <><h1>Loading...</h1></> : <>
+        {users.map(({id, name, email}) => (
+          <User key={id} name={name} email={email} />
+          ))}
+      </>}
     </div>
   );
 }
