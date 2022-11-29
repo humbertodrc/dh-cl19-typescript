@@ -3,6 +3,7 @@ import './App.css';
 import { User } from './components/User';
 import { getUsers } from './service/getUsers';
 import { UserI } from './types/user';
+import { formatUserName } from './utils/utils';
 
 function App() {
 
@@ -23,7 +24,9 @@ function App() {
     <div className="container">
       {loading ? <><h1>Loading...</h1></> : <>
         {users.map(({id, name, email}) => (
-          <User key={id} name={name} email={email} />
+            <li key={id}>
+            <span>{email}</span> (<span>{formatUserName(name)}</span>)
+          </li>
           ))}
       </>}
     </div>
